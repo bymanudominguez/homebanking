@@ -26,8 +26,7 @@ public class ClientController {
         return clientRepository.findAll().stream().map(client -> new ClientDTO(client)).collect(Collectors.toList());
     }
 
-
-    @RequestMapping("clients/{id}")
+    @RequestMapping("clients/{valor}")
     public ClientDTO getClient(@PathVariable Long valor){
 
         return new ClientDTO(Objects.requireNonNull(clientRepository.findById(valor).orElse(null)));

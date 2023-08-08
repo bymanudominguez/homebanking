@@ -16,7 +16,6 @@ public class Account {
     private Long id;
     private String number;
     private LocalDate creationDate;
-    private LocalDateTime localDateTime;
     private Double balance;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -39,14 +38,6 @@ public class Account {
 
         creationDate = LocalDate.now();
         return creationDate;
-    }
-
-    public LocalDateTime getLocalDateTime() {
-        return localDateTime;
-    }
-
-    public void setLocalDateTime(LocalDateTime localDateTime) {
-        this.localDateTime = localDateTime;
     }
 
     public void setCreationDate(LocalDate creationDate) {
