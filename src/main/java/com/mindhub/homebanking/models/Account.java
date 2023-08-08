@@ -41,6 +41,14 @@ public class Account {
         return creationDate;
     }
 
+    public LocalDateTime getLocalDateTime() {
+        return localDateTime;
+    }
+
+    public void setLocalDateTime(LocalDateTime localDateTime) {
+        this.localDateTime = localDateTime;
+    }
+
     public void setCreationDate(LocalDate creationDate) {
         this.creationDate = creationDate;
     }
@@ -53,7 +61,6 @@ public class Account {
         this.balance = balance;
     }
 
-    @JsonIgnore
     public Client getClient() {
         return client;
     }
