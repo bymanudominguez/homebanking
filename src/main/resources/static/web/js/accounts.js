@@ -19,8 +19,8 @@ Vue.createApp({
                     this.errorToats.show();
                 })
         },
-        formatDate(date) {
-            return new Date(date).toLocaleDateString('en-us');
+        formatDate(creationDate) {
+            return new Date(creationDate).toLocaleDateString('en-us');
         },
     },
     mounted() {
