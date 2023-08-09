@@ -1,12 +1,10 @@
 package com.mindhub.homebanking.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
+
 
 @Entity
 public class Account {
@@ -15,7 +13,7 @@ public class Account {
     @GenericGenerator(name = "native", strategy = "native")
     private Long id;
     private String number;
-    private LocalDate creationDate;
+    private LocalDateTime creationDate;
     private Double balance;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -33,14 +31,12 @@ public class Account {
         this.number = number;
     }
 
-
-    public LocalDate getCreationDate() {
-
-        creationDate = LocalDate.now();
+    public LocalDateTime getCreationDate() {
+        creationDate = LocalDateTime.now();
         return creationDate;
     }
 
-    public void setCreationDate(LocalDate creationDate) {
+    public void setCreationDate(LocalDateTime creationDate) {
         this.creationDate = creationDate;
     }
 

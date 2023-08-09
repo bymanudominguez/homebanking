@@ -1,5 +1,6 @@
 package com.mindhub.homebanking;
 
+import com.mindhub.homebanking.dtos.AccountDTO;
 import com.mindhub.homebanking.models.Account;
 import com.mindhub.homebanking.models.Client;
 import com.mindhub.homebanking.repositories.AccountRepository;
@@ -11,6 +12,7 @@ import org.springframework.context.annotation.Bean;
 
 import javax.persistence.Id;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @SpringBootApplication
 public class HomebankingApplication {
@@ -56,7 +58,6 @@ public class HomebankingApplication {
 			client2.addAccount(account4);
 			accountRepository.save(account4);
 
-			clientRepository.save(new Client("Manuel", "Domínguez", "bymanudominguez@gmail.com"));
 			clientRepository.save(new Client("Frodo", "Baggins", "myprecious@lor.com"));
 
 		};
