@@ -40,9 +40,9 @@ public class HomebankingApplication {
 			client1.addAccount(account1);
 			accountRepository.save(account1);
 
-			Transaction transaction1 = new Transaction(TransactionType.CREDITO, 50000.0, "Varios", LocalDateTime.now());
+			Transaction transaction1 = new Transaction(TransactionType.CREDIT, 50000.0, "Varios", LocalDateTime.now());
 
-			Transaction transaction2 = new Transaction(TransactionType.DEBITO, (-10000.0), "Aporte de capital", LocalDateTime.now());
+			Transaction transaction2 = new Transaction(TransactionType.DEBIT, (-10000.0), "Aporte de capital", LocalDateTime.now());
 
 			account1.addTransaction(transaction1);
 			account1.addTransaction(transaction2);
@@ -57,9 +57,9 @@ public class HomebankingApplication {
 			client1.addAccount(account2);
 			accountRepository.save(account2);
 
-			Transaction transaction3 = new Transaction(TransactionType.CREDITO, 34000.0, "Varios", LocalDateTime.now());
+			Transaction transaction3 = new Transaction(TransactionType.CREDIT, 34000.0, "Varios", LocalDateTime.now());
 
-			Transaction transaction4 = new Transaction(TransactionType.DEBITO, (-90000.0), "Aporte de capital", LocalDateTime.now());
+			Transaction transaction4 = new Transaction(TransactionType.DEBIT, (-90000.0), "Aporte de capital", LocalDateTime.now());
 
 			account2.addTransaction(transaction3);
 			account2.addTransaction(transaction4);
@@ -74,9 +74,9 @@ public class HomebankingApplication {
 			client2.addAccount(account3);
 			accountRepository.save(account3);
 
-			Transaction transaction5 = new Transaction(TransactionType.CREDITO, 10000.0, "Varios", LocalDateTime.now());
+			Transaction transaction5 = new Transaction(TransactionType.CREDIT, 10000.0, "Varios", LocalDateTime.now());
 
-			Transaction transaction6 = new Transaction(TransactionType.DEBITO, (-30000.0), "Aporte de capital", LocalDateTime.now());
+			Transaction transaction6 = new Transaction(TransactionType.DEBIT, (-30000.0), "Aporte de capital", LocalDateTime.now());
 
 			account3.addTransaction(transaction5);
 			account3.addTransaction(transaction6);
@@ -91,9 +91,9 @@ public class HomebankingApplication {
 			client2.addAccount(account4);
 			accountRepository.save(account4);
 
-			Transaction transaction7 = new Transaction(TransactionType.CREDITO, 70000.0, "Varios", LocalDateTime.now());
+			Transaction transaction7 = new Transaction(TransactionType.CREDIT, 70000.0, "Varios", LocalDateTime.now());
 
-			Transaction transaction8 = new Transaction(TransactionType.DEBITO, (-80000.0), "Aporte de capital", LocalDateTime.now());
+			Transaction transaction8 = new Transaction(TransactionType.DEBIT, (-80000.0), "Aporte de capital", LocalDateTime.now());
 
 			account4.addTransaction(transaction7);
 			account4.addTransaction(transaction8);

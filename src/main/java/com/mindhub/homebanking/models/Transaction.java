@@ -59,6 +59,7 @@ public class Transaction {
     }
 
     public LocalDateTime getLocalDateTime() {
+        localDateTime = LocalDateTime.now();
         return localDateTime;
     }
 
