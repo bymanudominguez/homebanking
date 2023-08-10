@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
@@ -27,6 +25,6 @@ public class AccountController {
     @RequestMapping("/accounts/{id}")
     public AccountDTO getAccount(@PathVariable Long id){
 
-        return new AccountDTO(Objects.requireNonNull(accountRepository.findById(id).orElse(null)));
+        return new AccountDTO(accountRepository.findById(id).orElse(null));
     }
 }
