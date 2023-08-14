@@ -4,7 +4,9 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Loan {
@@ -17,8 +19,8 @@ public class Loan {
     @ElementCollection
     private List<Integer> payments = new ArrayList<>();
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "loans")
-    private List<ClientLoan> clientLoans = new ArrayList<>();
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "loan")
+    private Set<ClientLoan> clientLoans = new HashSet<>();
 
     public Loan(){
 
@@ -54,5 +56,14 @@ public class Loan {
 
     public void setPayments(List<Integer> payments) {
         this.payments = payments;
+    }
+
+    public Set<ClientLoan> getClientLoans() {
+        return clientLoans;
+    }
+
+    public void addClientLoan(ClientLoan clientLoan){
+        clientLoan.setLoan(this);
+        this.clientLoans.add(clientLoan);
     }
 }
