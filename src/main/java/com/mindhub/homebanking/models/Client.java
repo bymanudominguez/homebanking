@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 public class Client {
@@ -86,5 +87,9 @@ public class Client {
     public void addClientLoan(ClientLoan clientLoan){
         clientLoan.setClient(this);
         this.clientLoans.add(clientLoan);
+    }
+
+    public List<Loan> getLoans(){
+        return clientLoans.stream().map(clientLoan -> clientLoan.getLoan()).collect(Collectors.toList());
     }
 }
