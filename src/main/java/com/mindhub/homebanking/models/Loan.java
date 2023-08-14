@@ -17,6 +17,9 @@ public class Loan {
     @ElementCollection
     private List<Integer> payments = new ArrayList<>();
 
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "loans")
+    private List<ClientLoan> clientLoans = new ArrayList<>();
+
     public Loan(){
 
     }
