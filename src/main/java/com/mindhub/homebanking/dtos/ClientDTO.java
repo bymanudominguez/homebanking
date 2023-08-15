@@ -14,17 +14,11 @@ public class ClientDTO {
     public Set<ClientLoanDTO> loans;
 
     public ClientDTO(Client client) {
-
         this.id = client.getId();
-
         this.firstName = client.getFirstName();
-
         this.lastName = client.getLastName();
-
         this.email = client.getEmail();
-
         this.accounts = client.getAccounts().stream().map(account -> new AccountDTO(account)).collect(Collectors.toSet());
-
         this.loans = client.getClientLoans().stream().map(clientLoan -> new ClientLoanDTO(clientLoan)).collect(Collectors.toSet());
     }
 
