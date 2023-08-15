@@ -24,6 +24,14 @@ public class Account {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "account")
     private Set<Transaction> transactions = new HashSet<>();
 
+    public Account() {
+    }
+
+    public Account(String number, LocalDateTime creationDate) {
+        this.number = number;
+        this.creationDate = creationDate;
+    }
+
     public Long getId() {
         return id;
     }
@@ -37,7 +45,6 @@ public class Account {
     }
 
     public LocalDateTime getCreationDate() {
-        creationDate = LocalDateTime.now();
         return creationDate;
     }
 

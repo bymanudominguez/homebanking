@@ -71,9 +71,7 @@ public class HomebankingApplication {
 			clientLoanRepository.save(clientLoan3);
 			clientLoanRepository.save(clientLoan4);
 
-			Account account1 = new Account();
-			account1.setNumber("VIN001");
-			account1.getCreationDate();
+			Account account1 = new Account("VIN001", LocalDateTime.now());
 			account1.setBalance(5000.00);
 			client1.addAccount(account1);
 			accountRepository.save(account1);
@@ -87,11 +85,9 @@ public class HomebankingApplication {
 			transactionRepository.save(transaction1);
 			transactionRepository.save(transaction2);
 
-			Account account2 = new Account();
-
-			account2.setNumber("VIN002");
-			account2.getCreationDate();
+			Account account2 = new Account("VIN002", LocalDateTime.now());
 			account2.setBalance(7500.00);
+			account2.setCreationDate(account2.getCreationDate().plusDays(1));
 			client1.addAccount(account2);
 			accountRepository.save(account2);
 
@@ -107,7 +103,6 @@ public class HomebankingApplication {
 			Account account3 = new Account();
 
 			account3.setNumber("VIN003");
-			account3.getCreationDate();
 			account3.setBalance(1000000.00);
 			client2.addAccount(account3);
 			accountRepository.save(account3);
@@ -124,7 +119,6 @@ public class HomebankingApplication {
 			Account account4 = new Account();
 
 			account4.setNumber("VIN004");
-			account4.getCreationDate();
 			account4.setBalance(10500.00);
 			client2.addAccount(account4);
 			accountRepository.save(account4);
