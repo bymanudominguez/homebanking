@@ -131,7 +131,7 @@ public class HomebankingApplication {
 
 			Transaction transaction7 = new Transaction(TransactionType.CREDIT, 70000.0, "Varios", LocalDateTime.now());
 
-			Transaction transaction8 = new Transaction(TransactionType.DEBIT, (-80000.0), "Aporte de capital", LocalDateTime.now());
+			Transaction transaction8 = new Transaction(TransactionType.DEBIT, (-80000.0), "Compra Online", LocalDateTime.now());
 
 			account4.addTransaction(transaction7);
 			account4.addTransaction(transaction8);
