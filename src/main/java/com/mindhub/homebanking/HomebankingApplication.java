@@ -7,6 +7,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -18,7 +19,7 @@ public class HomebankingApplication {
 	}
 
 	@Bean
-	public CommandLineRunner init (ClientRepository clientRepository, AccountRepository accountRepository, TransactionRepository transactionRepository, LoanRepository loanRepository, ClientLoanRepository clientLoanRepository){
+	public CommandLineRunner init (ClientRepository clientRepository, AccountRepository accountRepository, TransactionRepository transactionRepository, LoanRepository loanRepository, ClientLoanRepository clientLoanRepository, CardRepository cardRepository){
 		return args -> {
 			Client client1 = new Client("Melba", "Morel", "melba@mindhub.com");
 			clientRepository.save(client1);
@@ -71,6 +72,30 @@ public class HomebankingApplication {
 			clientLoanRepository.save(clientLoan3);
 			clientLoanRepository.save(clientLoan4);
 
+			Card card1 = new Card(LocalDate.now(), CardType.DEBIT, CardColor.GOLD);
+			card1.setThruDate(card1.getFromDate().plusYears(5));
+			card1.setCvv(628);
+			card1.setNumber(215644389);
+			card1.setCardHolder(client1.getFirstName() + " " + client1.getLastName());
+			client1.addCard(card1);
+			cardRepository.save(card1);
+
+			Card card2 = new Card(LocalDate.now(), CardType.CREDIT, CardColor.TITANIUM);
+			card2.setThruDate(card2.getFromDate().plusYears(5));
+			card2.setCvv(146);
+			card2.setNumber(215441422);
+			card2.setCardHolder(client1.getFirstName() + " " + client1.getLastName());
+			client1.addCard(card2);
+			cardRepository.save(card2);
+
+			Card card3 = new Card(LocalDate.now(), CardType.CREDIT, CardColor.SILVER);
+			card3.setThruDate(card3.getFromDate().plusYears(5));
+			card3.setCvv(782);
+			card3.setNumber(565441434);
+			card3.setCardHolder(client2.getFirstName() + " " + client2.getLastName());
+			client2.addCard(card3);
+			cardRepository.save(card3);
+
 			Account account1 = new Account("VIN001", LocalDateTime.now());
 			account1.setBalance(5000.00);
 			client1.addAccount(account1);
@@ -100,9 +125,7 @@ public class HomebankingApplication {
 			transactionRepository.save(transaction3);
 			transactionRepository.save(transaction4);
 
-			Account account3 = new Account();
-
-			account3.setNumber("VIN003");
+			Account account3 = new Account("VIN003", LocalDateTime.now());
 			account3.setBalance(1000000.00);
 			client2.addAccount(account3);
 			accountRepository.save(account3);
@@ -116,9 +139,7 @@ public class HomebankingApplication {
 			transactionRepository.save(transaction5);
 			transactionRepository.save(transaction6);
 
-			Account account4 = new Account();
-
-			account4.setNumber("VIN004");
+			Account account4 = new Account("VIN004", LocalDateTime.now());
 			account4.setBalance(10500.00);
 			client2.addAccount(account4);
 			accountRepository.save(account4);
