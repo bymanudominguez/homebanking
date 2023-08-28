@@ -26,7 +26,11 @@ public class Card {
     }
 
     public Card(LocalDate fromDate, CardType cardType, CardColor cardColor) {
+        this.cardHolder = cardHolder;
+        this.number = number;
+        this.cvv = cvv;
         this.fromDate = fromDate;
+        this.thruDate = thruDate;
         this.cardType = cardType;
         this.cardColor = cardColor;
     }

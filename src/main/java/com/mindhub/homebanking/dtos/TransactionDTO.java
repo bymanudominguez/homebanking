@@ -36,7 +36,7 @@ public class TransactionDTO {
         return description;
     }
 
-    public LocalDateTime getLocalDateTime() {
+    public LocalDateTime getDate() {
         return localDateTime;
     }
 
