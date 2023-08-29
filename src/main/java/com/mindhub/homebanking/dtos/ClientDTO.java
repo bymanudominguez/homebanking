@@ -14,6 +14,8 @@ public class ClientDTO {
     public Set<ClientLoanDTO> loans;
     public Set<CardDTO> cards;
 
+    public ClientDTO(){}
+
     public ClientDTO(Client client) {
         this.id = client.getId();
         this.firstName = client.getFirstName();

@@ -78,7 +78,7 @@ public class HomebankingApplication {
 			Card card1 = new Card(LocalDate.now(), CardType.DEBIT, CardColor.GOLD);
 			card1.setThruDate(card1.getFromDate().plusYears(5));
 			card1.setCvv(628);
-			card1.setNumber(215644389);
+			card1.setNumber("215644389");
 			card1.setCardHolder(client1.getFirstName() + " " + client1.getLastName());
 			client1.addCard(card1);
 			cardRepository.save(card1);
@@ -86,7 +86,7 @@ public class HomebankingApplication {
 			Card card2 = new Card(LocalDate.now(), CardType.CREDIT, CardColor.TITANIUM);
 			card2.setThruDate(card2.getFromDate().plusYears(5));
 			card2.setCvv(146);
-			card2.setNumber(215441422);
+			card2.setNumber("215441422");
 			card2.setCardHolder(client1.getFirstName() + " " + client1.getLastName());
 			client1.addCard(card2);
 			cardRepository.save(card2);
@@ -94,7 +94,7 @@ public class HomebankingApplication {
 			Card card3 = new Card(LocalDate.now(), CardType.CREDIT, CardColor.SILVER);
 			card3.setThruDate(card3.getFromDate().plusYears(5));
 			card3.setCvv(782);
-			card3.setNumber(565441434);
+			card3.setNumber("565441434");
 			card3.setCardHolder(client2.getFirstName() + " " + client2.getLastName());
 			client2.addCard(card3);
 			cardRepository.save(card3);

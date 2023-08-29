@@ -1,7 +1,9 @@
 package com.mindhub.homebanking.controllers;
 
 import com.mindhub.homebanking.dtos.ClientDTO;
+import com.mindhub.homebanking.models.Account;
 import com.mindhub.homebanking.models.Client;
+import com.mindhub.homebanking.repositories.AccountRepository;
 import com.mindhub.homebanking.repositories.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -22,6 +26,15 @@ public class ClientController {
 
     @Autowired
     private ClientRepository clientRepository;
+
+    @Autowired
+    private AccountRepository accountRepository;
+
+    @RequestMapping("/clients")
+    public List<ClientDTO> getClients() {
+
+        return clientRepository.findAll().stream().map(client -> new ClientDTO(client)).collect(Collectors.toList());
+    }
 
     @RequestMapping(path = "/clients", method = RequestMethod.POST)
     public ResponseEntity<Object> register(
@@ -38,15 +51,14 @@ public class ClientController {
             return new ResponseEntity<>("Email already in use", HttpStatus.FORBIDDEN);
         }
 
-        clientRepository.save(new Client(firstName, lastName, email, passwordEncoder.encode(password)));
+        Client client = clientRepository.save(new Client(firstName, lastName, email, passwordEncoder.encode(password)));
+
+        Account account = new Account("VIN-" + getRandomNumber(10000000, 99999999), LocalDateTime.now());
+        account.setBalance(0.00);
+        client.addAccount(account);
+        accountRepository.save(account);
 
         return new ResponseEntity<>(HttpStatus.CREATED);
-    }
-
-    @RequestMapping("/clients")
-    public List<ClientDTO> getClients() {
-
-        return clientRepository.findAll().stream().map(client -> new ClientDTO(client)).collect(Collectors.toList());
     }
 
     @RequestMapping("/clients/{id}")
@@ -55,8 +67,24 @@ public class ClientController {
         return new ClientDTO(Objects.requireNonNull(clientRepository.findById(id).orElse(null)));
     }
 
+    @GetMapping("/clients/online")
+    public ResponseEntity<String> connection(Authentication authentication){
+        if (authentication != null){
+
+            return new ResponseEntity<>("Connected", HttpStatus.ACCEPTED);
+        }else{
+
+            return new ResponseEntity<>("Disconnected", HttpStatus.FORBIDDEN);
+        }
+    }
+
     @GetMapping("/clients/current")
     public ClientDTO getCurrent(Authentication authentication){
         return new ClientDTO(clientRepository.findByEmail(authentication.getName()));
+    }
+
+    public int getRandomNumber(int min, int max) {
+
+        return (int) ((Math.random() * (max - min)) + min);
     }
 }
