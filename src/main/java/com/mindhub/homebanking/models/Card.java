@@ -12,7 +12,7 @@ public class Card {
     @GenericGenerator(name = "native", strategy = "native")
     private Long id;
     private String cardHolder;
-    private Integer number;
+    private String number;
     private int cvv;
     private LocalDate fromDate;
     private LocalDate thruDate;
@@ -47,11 +47,11 @@ public class Card {
         this.cardHolder = cardHolder;
     }
 
-    public int getNumber() {
+    public String getNumber() {
         return number;
     }
 
-    public void setNumber(Integer number) {
+    public void setNumber(String number) {
         this.number = number;
     }
 

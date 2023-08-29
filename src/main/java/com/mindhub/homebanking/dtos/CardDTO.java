@@ -9,7 +9,7 @@ import java.time.LocalDate;
 public class CardDTO {
     private Long id;
     private String cardHolder;
-    private Integer number;
+    private String number;
     private int cvv;
     private LocalDate fromDate;
     private LocalDate thruDate;
@@ -35,7 +35,7 @@ public class CardDTO {
         return cardHolder;
     }
 
-    public int getNumber() {
+    public String getNumber() {
         return number;
     }
 
