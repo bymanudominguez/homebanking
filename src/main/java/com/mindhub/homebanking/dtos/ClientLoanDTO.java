@@ -1,19 +1,15 @@
 package com.mindhub.homebanking.dtos;
 
-import com.mindhub.homebanking.models.Client;
 import com.mindhub.homebanking.models.ClientLoan;
 
-import java.util.Set;
-import java.util.stream.Collectors;
-
 public class ClientLoanDTO {
-    private Long id;
-    private Long loanId;
-    private String name;
-    private double amount;
-    private int payments;
+    private final Long id;
+    private final Long loanId;
+    private final String name;
+    private final double amount;
+    private final int payments;
 
-    public ClientLoanDTO(ClientLoan clientLoan){
+    public ClientLoanDTO(ClientLoan clientLoan) {
         id = clientLoan.getId();
         loanId = clientLoan.getLoan().getId();
         name = clientLoan.getLoan().getName();

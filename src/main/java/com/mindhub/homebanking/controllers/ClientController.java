@@ -37,16 +37,14 @@ public class ClientController {
     }
 
     @RequestMapping(path = "/clients", method = RequestMethod.POST)
-    public ResponseEntity<Object> register(
-            @RequestParam String firstName, @RequestParam String lastName,
-            @RequestParam String email, @RequestParam String password) {
+    public ResponseEntity<Object> register(@RequestParam String firstName, @RequestParam String lastName, @RequestParam String email, @RequestParam String password) {
 
         if (firstName.isBlank() || lastName.isBlank() || email.isBlank() || password.isBlank()) {
 
             return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
         }
 
-        if (clientRepository.findByEmail(email) !=  null) {
+        if (clientRepository.findByEmail(email) != null) {
 
             return new ResponseEntity<>("Email already in use", HttpStatus.FORBIDDEN);
         }
@@ -68,18 +66,18 @@ public class ClientController {
     }
 
     @GetMapping("/clients/online")
-    public ResponseEntity<String> connection(Authentication authentication){
-        if (authentication != null){
+    public ResponseEntity<String> connection(Authentication authentication) {
+        if (authentication != null) {
 
             return new ResponseEntity<>("Connected", HttpStatus.ACCEPTED);
-        }else{
+        } else {
 
             return new ResponseEntity<>("Disconnected", HttpStatus.FORBIDDEN);
         }
     }
 
     @GetMapping("/clients/current")
-    public ClientDTO getCurrent(Authentication authentication){
+    public ClientDTO getCurrent(Authentication authentication) {
         return new ClientDTO(clientRepository.findByEmail(authentication.getName()));
     }
 

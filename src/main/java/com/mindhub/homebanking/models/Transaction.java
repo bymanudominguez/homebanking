@@ -7,18 +7,16 @@ import java.time.LocalDateTime;
 
 @Entity
 public class Transaction {
+    @ManyToOne(fetch = FetchType.EAGER)
+    public Account account;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
     private Long id;
-
     private TransactionType type;
     private Double amount;
     private String description;
     private LocalDateTime localDateTime;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    public Account account;
 
     public Transaction() {
     }

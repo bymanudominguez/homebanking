@@ -20,7 +20,7 @@ public class ClientLoan {
     @ManyToOne(fetch = FetchType.EAGER)
     private Loan loan;
 
-    public ClientLoan(){
+    public ClientLoan() {
 
     }
 

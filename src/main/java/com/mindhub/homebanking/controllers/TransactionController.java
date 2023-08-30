@@ -17,7 +17,7 @@ public class TransactionController {
     private TransactionRepository transactionRepository;
 
     @RequestMapping("/transactions")
-    public List<TransactionDTO> getTransaction(){
+    public List<TransactionDTO> getTransaction() {
 
         return transactionRepository.findAll().stream().map(transaction -> new TransactionDTO(transaction)).collect(Collectors.toList());
     }

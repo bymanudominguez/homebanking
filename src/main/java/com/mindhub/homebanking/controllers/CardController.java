@@ -32,21 +32,21 @@ public class CardController {
     private ClientRepository clientRepository;
 
     @RequestMapping("/cards")
-    public List<CardDTO> getCards(){
+    public List<CardDTO> getCards() {
         return cardRepository.findAll().stream().map(card -> new CardDTO(card)).collect(Collectors.toList());
     }
 
     @PostMapping("/clients/current/cards")
-    public ResponseEntity<Object> addCard(Authentication authentication, @RequestParam CardType cardType, @RequestParam CardColor cardColor){
+    public ResponseEntity<Object> addCard(Authentication authentication, @RequestParam CardType cardType, @RequestParam CardColor cardColor) {
 
         Client client = clientRepository.findByEmail(authentication.getName());
 
         Set<Card> sameTypeCards = client.getCards().stream().filter(card -> card.getCardType() == cardType).collect(Collectors.toSet());
 
-        if (sameTypeCards.toArray().length >= 3){
+        if (sameTypeCards.toArray().length >= 3) {
 
             return new ResponseEntity<>("The maximum number for this type of cards was reached", HttpStatus.FORBIDDEN);
-        }else {
+        } else {
             Card card = new Card(LocalDate.now(), cardType, cardColor);
             card.setThruDate(card.getFromDate().plusYears(5));
             card.setCvv(getRandomNumber(100, 999));
