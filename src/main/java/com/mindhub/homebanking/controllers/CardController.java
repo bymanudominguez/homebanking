@@ -38,6 +38,15 @@ public class CardController {
 
     @PostMapping("/clients/current/cards")
     public ResponseEntity<Object> addCard(Authentication authentication, @RequestParam CardType cardType, @RequestParam CardColor cardColor) {
+        if (cardType == null) {
+
+            new ResponseEntity<>("You must specify the type of card", HttpStatus.FORBIDDEN);
+        }
+
+        if (cardColor == null) {
+
+            new ResponseEntity<>("You must specify the color of card", HttpStatus.FORBIDDEN);
+        }
 
         Client client = clientRepository.findByEmail(authentication.getName());
 
@@ -60,7 +69,11 @@ public class CardController {
     }
 
     public int getRandomNumber(int min, int max) {
+        int randomNumber;
+        do {
+            randomNumber = (int) ((Math.random() * (max - min)) + min);
+        } while (cardRepository.findByNumber(randomNumber + "-" + randomNumber + "-" + randomNumber + "-" + randomNumber) != null);
 
-        return (int) ((Math.random() * (max - min)) + min);
+        return randomNumber;
     }
 }

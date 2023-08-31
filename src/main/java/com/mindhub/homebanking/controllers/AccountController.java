@@ -1,8 +1,6 @@
 package com.mindhub.homebanking.controllers;
 
 import com.mindhub.homebanking.dtos.AccountDTO;
-import com.mindhub.homebanking.dtos.ClientDTO;
-import com.mindhub.homebanking.dtos.TransactionDTO;
 import com.mindhub.homebanking.models.Account;
 import com.mindhub.homebanking.models.Client;
 import com.mindhub.homebanking.repositories.AccountRepository;
@@ -18,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
@@ -52,21 +49,27 @@ public class AccountController {
     @PostMapping("/clients/current/accounts")
     public ResponseEntity<Object> addAccount(Authentication authentication) {
         Client client = clientRepository.findByEmail(authentication.getName());
-        if (client.getAccounts().toArray().length >= 3) {
+        if (client != null) {
+            if (client.getAccounts().toArray().length >= 3) {
 
-            return new ResponseEntity<>("The maximum number of accounts was reached", HttpStatus.FORBIDDEN);
-        } else {
-            Account account = new Account("VIN-" + getRandomNumber(10000000, 99999999), LocalDateTime.now());
-            account.setBalance(0.00);
-            client.addAccount(account);
-            accountRepository.save(account);
-
-            return new ResponseEntity<>("Account created successfully", HttpStatus.CREATED);
+                return new ResponseEntity<>("The maximum number of accounts was reached", HttpStatus.FORBIDDEN);
+            } else {
+                Account account = new Account("VIN-" + getRandomNumber(10000000, 99999999), LocalDateTime.now());
+                account.setBalance(0.00);
+                client.addAccount(account);
+                accountRepository.save(account);
+            }
         }
+
+        return new ResponseEntity<>("Account created successfully", HttpStatus.CREATED);
     }
 
     public int getRandomNumber(int min, int max) {
+        int randomNumber;
+        do {
+            randomNumber = (int) ((Math.random() * (max - min)) + min);
+        } while (accountRepository.findByNumber("VIN-" + randomNumber) != null);
 
-        return (int) ((Math.random() * (max - min)) + min);
+        return randomNumber;
     }
 }
