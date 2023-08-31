@@ -22,7 +22,7 @@ public class Account {
     private Client client;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "account")
-    private Set<Transaction> transactions = new HashSet<>();
+    private final Set<Transaction> transactions = new HashSet<>();
 
     public Account() {
     }
@@ -72,7 +72,7 @@ public class Account {
         return transactions;
     }
 
-    public void addTransaction(Transaction transaction){
+    public void addTransaction(Transaction transaction) {
         transaction.setAccount(this);
         this.transactions.add(transaction);
     }

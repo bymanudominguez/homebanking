@@ -32,21 +32,30 @@ public class CardController {
     private ClientRepository clientRepository;
 
     @RequestMapping("/cards")
-    public List<CardDTO> getCards(){
+    public List<CardDTO> getCards() {
         return cardRepository.findAll().stream().map(card -> new CardDTO(card)).collect(Collectors.toList());
     }
 
     @PostMapping("/clients/current/cards")
-    public ResponseEntity<Object> addCard(Authentication authentication, @RequestParam CardType cardType, @RequestParam CardColor cardColor){
+    public ResponseEntity<Object> addCard(Authentication authentication, @RequestParam CardType cardType, @RequestParam CardColor cardColor) {
+        if (cardType == null) {
+
+            new ResponseEntity<>("You must specify the type of card", HttpStatus.FORBIDDEN);
+        }
+
+        if (cardColor == null) {
+
+            new ResponseEntity<>("You must specify the color of card", HttpStatus.FORBIDDEN);
+        }
 
         Client client = clientRepository.findByEmail(authentication.getName());
 
         Set<Card> sameTypeCards = client.getCards().stream().filter(card -> card.getCardType() == cardType).collect(Collectors.toSet());
 
-        if (sameTypeCards.toArray().length >= 3){
+        if (sameTypeCards.toArray().length >= 3) {
 
             return new ResponseEntity<>("The maximum number for this type of cards was reached", HttpStatus.FORBIDDEN);
-        }else {
+        } else {
             Card card = new Card(LocalDate.now(), cardType, cardColor);
             card.setThruDate(card.getFromDate().plusYears(5));
             card.setCvv(getRandomNumber(100, 999));
@@ -60,7 +69,11 @@ public class CardController {
     }
 
     public int getRandomNumber(int min, int max) {
+        int randomNumber;
+        do {
+            randomNumber = (int) ((Math.random() * (max - min)) + min);
+        } while (cardRepository.findByNumber(randomNumber + "-" + randomNumber + "-" + randomNumber + "-" + randomNumber) != null);
 
-        return (int) ((Math.random() * (max - min)) + min);
+        return randomNumber;
     }
 }

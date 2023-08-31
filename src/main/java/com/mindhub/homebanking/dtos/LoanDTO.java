@@ -6,12 +6,12 @@ import java.util.List;
 
 
 public class LoanDTO {
-    private Long id;
-    private String name;
-    private Double maxAmount;
-    private List<Integer> payments;
+    private final Long id;
+    private final String name;
+    private final Double maxAmount;
+    private final List<Integer> payments;
 
-    public LoanDTO(Loan loan){
+    public LoanDTO(Loan loan) {
         id = loan.getId();
         name = loan.getName();
         maxAmount = loan.getMaxAmount();

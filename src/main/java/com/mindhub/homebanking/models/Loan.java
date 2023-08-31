@@ -11,6 +11,8 @@ import java.util.stream.Collectors;
 
 @Entity
 public class Loan {
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "loan")
+    private final Set<ClientLoan> clientLoans = new HashSet<>();
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
@@ -20,10 +22,7 @@ public class Loan {
     @ElementCollection
     private List<Integer> payments = new ArrayList<>();
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "loan")
-    private Set<ClientLoan> clientLoans = new HashSet<>();
-
-    public Loan(){
+    public Loan() {
 
     }
 
@@ -63,12 +62,12 @@ public class Loan {
         return clientLoans;
     }
 
-    public void addClientLoan(ClientLoan clientLoan){
+    public void addClientLoan(ClientLoan clientLoan) {
         clientLoan.setLoan(this);
         this.clientLoans.add(clientLoan);
     }
 
-    public List<Client> getClients(){
+    public List<Client> getClients() {
         return clientLoans.stream().map(clientLoan -> clientLoan.getClient()).collect(Collectors.toList());
     }
 }

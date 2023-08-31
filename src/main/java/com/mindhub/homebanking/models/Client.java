@@ -3,7 +3,6 @@ package com.mindhub.homebanking.models;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -21,17 +20,18 @@ public class Client {
     private String email;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "client")
-    private Set<Account> accounts = new HashSet<>();
+    private final Set<Account> accounts = new HashSet<>();
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "client")
-    private Set<ClientLoan> clientLoans = new HashSet<>();
+    private final Set<ClientLoan> clientLoans = new HashSet<>();
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "client")
-    private Set<Card> cards = new HashSet<>();
+    private final Set<Card> cards = new HashSet<>();
 
-    public Client() {}
+    public Client() {
+    }
 
-    public Client(String first, String last, String mail, String password){
+    public Client(String first, String last, String mail, String password) {
         this.firstName = first;
         this.lastName = last;
         this.email = mail;
@@ -91,7 +91,7 @@ public class Client {
         this.accounts.add(account);
     }
 
-    public void addClientLoan(ClientLoan clientLoan){
+    public void addClientLoan(ClientLoan clientLoan) {
         clientLoan.setClient(this);
         this.clientLoans.add(clientLoan);
     }
@@ -101,7 +101,7 @@ public class Client {
         this.cards.add(card);
     }
 
-    public List<Loan> getLoans(){
+    public List<Loan> getLoans() {
         return clientLoans.stream().map(clientLoan -> clientLoan.getLoan()).collect(Collectors.toList());
     }
 }

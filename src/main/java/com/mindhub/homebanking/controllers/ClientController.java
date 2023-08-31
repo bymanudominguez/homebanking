@@ -37,28 +37,32 @@ public class ClientController {
     }
 
     @RequestMapping(path = "/clients", method = RequestMethod.POST)
-    public ResponseEntity<Object> register(
-            @RequestParam String firstName, @RequestParam String lastName,
-            @RequestParam String email, @RequestParam String password) {
+    public ResponseEntity<Object> register(@RequestParam String firstName, @RequestParam String lastName, @RequestParam String email, @RequestParam String password) {
 
-        if (firstName.isBlank() || lastName.isBlank() || email.isBlank() || password.isBlank()) {
+        if (firstName.isBlank()) {
 
-            return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
-        }
+            return new ResponseEntity<>("You need to put your name", HttpStatus.FORBIDDEN);
+        } else if (lastName.isBlank()) {
 
-        if (clientRepository.findByEmail(email) !=  null) {
+            return new ResponseEntity<>("You need to enter your last name", HttpStatus.FORBIDDEN);
+        } else if (email.isBlank()) {
+
+            return new ResponseEntity<>("You need to put an email", HttpStatus.FORBIDDEN);
+        } else if (password.isBlank()) {
+
+            return new ResponseEntity<>("You need to set a password", HttpStatus.FORBIDDEN);
+        } else if (clientRepository.findByEmail(email) != null) {
 
             return new ResponseEntity<>("Email already in use", HttpStatus.FORBIDDEN);
+        } else {
+            Client client = clientRepository.save(new Client(firstName, lastName, email, passwordEncoder.encode(password)));
+            Account account = new Account("VIN-" + getRandomNumber(10000000, 99999999), LocalDateTime.now());
+            account.setBalance(0.00);
+            client.addAccount(account);
+            accountRepository.save(account);
+
+            return new ResponseEntity<>("User successfully created", HttpStatus.CREATED);
         }
-
-        Client client = clientRepository.save(new Client(firstName, lastName, email, passwordEncoder.encode(password)));
-
-        Account account = new Account("VIN-" + getRandomNumber(10000000, 99999999), LocalDateTime.now());
-        account.setBalance(0.00);
-        client.addAccount(account);
-        accountRepository.save(account);
-
-        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @RequestMapping("/clients/{id}")
@@ -68,23 +72,27 @@ public class ClientController {
     }
 
     @GetMapping("/clients/online")
-    public ResponseEntity<String> connection(Authentication authentication){
-        if (authentication != null){
+    public ResponseEntity<String> connection(Authentication authentication) {
+        if (authentication != null) {
 
             return new ResponseEntity<>("Connected", HttpStatus.ACCEPTED);
-        }else{
+        } else {
 
             return new ResponseEntity<>("Disconnected", HttpStatus.FORBIDDEN);
         }
     }
 
     @GetMapping("/clients/current")
-    public ClientDTO getCurrent(Authentication authentication){
+    public ClientDTO getCurrent(Authentication authentication) {
         return new ClientDTO(clientRepository.findByEmail(authentication.getName()));
     }
 
     public int getRandomNumber(int min, int max) {
+        int randomNumber;
+        do {
+            randomNumber = (int) ((Math.random() * (max - min)) + min);
+        } while (accountRepository.findByNumber("VIN-" + randomNumber) != null);
 
-        return (int) ((Math.random() * (max - min)) + min);
+        return randomNumber;
     }
 }

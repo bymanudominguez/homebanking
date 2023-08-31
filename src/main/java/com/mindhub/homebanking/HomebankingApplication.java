@@ -16,148 +16,150 @@ import java.util.List;
 @SpringBootApplication
 public class HomebankingApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(HomebankingApplication.class, args);
-	}
-	@Autowired
-	private PasswordEncoder passwordEncoder;
-	@Bean
-	public CommandLineRunner init (ClientRepository clientRepository, AccountRepository accountRepository, TransactionRepository transactionRepository, LoanRepository loanRepository, ClientLoanRepository clientLoanRepository, CardRepository cardRepository){
-		return args -> {
-			Client client1 = new Client("Melba", "Morel", "melba@mindhub.com", passwordEncoder.encode("mad123"));
-			clientRepository.save(client1);
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
-			Client client2 = new Client("Lucia", "Colombo", "lucolombo@gmail.com", passwordEncoder.encode("mad123"));
-			clientRepository.save(client2);
+    public static void main(String[] args) {
+        SpringApplication.run(HomebankingApplication.class, args);
+    }
 
-			Loan loan1 = new Loan("Hipotecario");
-			loan1.setMaxAmount(500.000);
-			loan1.setPayments(List.of(12,24,36,48,60));
+    @Bean
+    public CommandLineRunner init(ClientRepository clientRepository, AccountRepository accountRepository, TransactionRepository transactionRepository, LoanRepository loanRepository, ClientLoanRepository clientLoanRepository, CardRepository cardRepository) {
+        return args -> {
+            Client client1 = new Client("Melba", "Morel", "melba@mindhub.com", passwordEncoder.encode("mad123"));
+            clientRepository.save(client1);
 
-			Loan loan2 = new Loan("Personal");
-			loan2.setMaxAmount(100.000);
-			loan2.setPayments(List.of(6, 12, 24));
+            Client client2 = new Client("Lucia", "Colombo", "lucolombo@gmail.com", passwordEncoder.encode("mad123"));
+            clientRepository.save(client2);
 
-			Loan loan3 = new Loan("Automotriz");
-			loan3.setMaxAmount(300.000);
-			loan3.setPayments(List.of(6,12,24,36));
+            Loan loan1 = new Loan("Hipotecario");
+            loan1.setMaxAmount(500.000);
+            loan1.setPayments(List.of(12, 24, 36, 48, 60));
 
-			loanRepository.save(loan1);
-			loanRepository.save(loan2);
-			loanRepository.save(loan3);
+            Loan loan2 = new Loan("Personal");
+            loan2.setMaxAmount(100.000);
+            loan2.setPayments(List.of(6, 12, 24));
 
-			ClientLoan clientLoan1 = new ClientLoan();
-			clientLoan1.setLoan(loan1);
-			clientLoan1.setAmount(400000);
-			clientLoan1.setPayments(60);
-			clientLoan1.setClient(client1);
+            Loan loan3 = new Loan("Automotriz");
+            loan3.setMaxAmount(300.000);
+            loan3.setPayments(List.of(6, 12, 24, 36));
 
-			ClientLoan clientLoan2 = new ClientLoan();
-			clientLoan2.setLoan(loan2);
-			clientLoan2.setAmount(50000);
-			clientLoan2.setPayments(12);
-			clientLoan2.setClient(client1);
+            loanRepository.save(loan1);
+            loanRepository.save(loan2);
+            loanRepository.save(loan3);
 
-			ClientLoan clientLoan3 = new ClientLoan();
-			clientLoan3.setLoan(loan2);
-			clientLoan3.setAmount(100000);
-			clientLoan3.setPayments(24);
-			clientLoan3.setClient(client2);
+            ClientLoan clientLoan1 = new ClientLoan();
+            clientLoan1.setLoan(loan1);
+            clientLoan1.setAmount(400000);
+            clientLoan1.setPayments(60);
+            clientLoan1.setClient(client1);
 
-			ClientLoan clientLoan4 = new ClientLoan();
-			clientLoan4.setLoan(loan3);
-			clientLoan4.setAmount(200000);
-			clientLoan4.setPayments(36);
-			clientLoan4.setClient(client2);
+            ClientLoan clientLoan2 = new ClientLoan();
+            clientLoan2.setLoan(loan2);
+            clientLoan2.setAmount(50000);
+            clientLoan2.setPayments(12);
+            clientLoan2.setClient(client1);
 
-			clientLoanRepository.save(clientLoan1);
-			clientLoanRepository.save(clientLoan2);
-			clientLoanRepository.save(clientLoan3);
-			clientLoanRepository.save(clientLoan4);
+            ClientLoan clientLoan3 = new ClientLoan();
+            clientLoan3.setLoan(loan2);
+            clientLoan3.setAmount(100000);
+            clientLoan3.setPayments(24);
+            clientLoan3.setClient(client2);
 
-			Card card1 = new Card(LocalDate.now(), CardType.DEBIT, CardColor.GOLD);
-			card1.setThruDate(card1.getFromDate().plusYears(5));
-			card1.setCvv(628);
-			card1.setNumber("215644389");
-			card1.setCardHolder(client1.getFirstName() + " " + client1.getLastName());
-			client1.addCard(card1);
-			cardRepository.save(card1);
+            ClientLoan clientLoan4 = new ClientLoan();
+            clientLoan4.setLoan(loan3);
+            clientLoan4.setAmount(200000);
+            clientLoan4.setPayments(36);
+            clientLoan4.setClient(client2);
 
-			Card card2 = new Card(LocalDate.now(), CardType.CREDIT, CardColor.TITANIUM);
-			card2.setThruDate(card2.getFromDate().plusYears(5));
-			card2.setCvv(146);
-			card2.setNumber("215441422");
-			card2.setCardHolder(client1.getFirstName() + " " + client1.getLastName());
-			client1.addCard(card2);
-			cardRepository.save(card2);
+            clientLoanRepository.save(clientLoan1);
+            clientLoanRepository.save(clientLoan2);
+            clientLoanRepository.save(clientLoan3);
+            clientLoanRepository.save(clientLoan4);
 
-			Card card3 = new Card(LocalDate.now(), CardType.CREDIT, CardColor.SILVER);
-			card3.setThruDate(card3.getFromDate().plusYears(5));
-			card3.setCvv(782);
-			card3.setNumber("565441434");
-			card3.setCardHolder(client2.getFirstName() + " " + client2.getLastName());
-			client2.addCard(card3);
-			cardRepository.save(card3);
+            Card card1 = new Card(LocalDate.now(), CardType.DEBIT, CardColor.GOLD);
+            card1.setThruDate(card1.getFromDate().plusYears(5));
+            card1.setCvv(628);
+            card1.setNumber("215644389");
+            card1.setCardHolder(client1.getFirstName() + " " + client1.getLastName());
+            client1.addCard(card1);
+            cardRepository.save(card1);
 
-			Account account1 = new Account("VIN001", LocalDateTime.now());
-			account1.setBalance(5000.00);
-			client1.addAccount(account1);
-			accountRepository.save(account1);
+            Card card2 = new Card(LocalDate.now(), CardType.CREDIT, CardColor.TITANIUM);
+            card2.setThruDate(card2.getFromDate().plusYears(5));
+            card2.setCvv(146);
+            card2.setNumber("215441422");
+            card2.setCardHolder(client1.getFirstName() + " " + client1.getLastName());
+            client1.addCard(card2);
+            cardRepository.save(card2);
 
-			Transaction transaction1 = new Transaction(TransactionType.CREDIT, 50000.0, "Varios", LocalDateTime.now());
+            Card card3 = new Card(LocalDate.now(), CardType.CREDIT, CardColor.SILVER);
+            card3.setThruDate(card3.getFromDate().plusYears(5));
+            card3.setCvv(782);
+            card3.setNumber("565441434");
+            card3.setCardHolder(client2.getFirstName() + " " + client2.getLastName());
+            client2.addCard(card3);
+            cardRepository.save(card3);
 
-			Transaction transaction2 = new Transaction(TransactionType.DEBIT, (-10000.0), "Aporte de capital", LocalDateTime.now());
+            Account account1 = new Account("VIN001", LocalDateTime.now());
+            account1.setBalance(5000.00);
+            client1.addAccount(account1);
+            accountRepository.save(account1);
 
-			account1.addTransaction(transaction1);
-			account1.addTransaction(transaction2);
-			transactionRepository.save(transaction1);
-			transactionRepository.save(transaction2);
+            Transaction transaction1 = new Transaction(TransactionType.CREDIT, 50000.0, "Varios", LocalDateTime.now());
 
-			Account account2 = new Account("VIN002", LocalDateTime.now());
-			account2.setBalance(7500.00);
-			account2.setCreationDate(account2.getCreationDate().plusDays(1));
-			client1.addAccount(account2);
-			accountRepository.save(account2);
+            Transaction transaction2 = new Transaction(TransactionType.DEBIT, (-10000.0), "Aporte de capital", LocalDateTime.now());
 
-			Transaction transaction3 = new Transaction(TransactionType.CREDIT, 34000.0, "Varios", LocalDateTime.now());
+            account1.addTransaction(transaction1);
+            account1.addTransaction(transaction2);
+            transactionRepository.save(transaction1);
+            transactionRepository.save(transaction2);
 
-			Transaction transaction4 = new Transaction(TransactionType.DEBIT, (-90000.0), "Aporte de capital", LocalDateTime.now());
+            Account account2 = new Account("VIN002", LocalDateTime.now());
+            account2.setBalance(7500.00);
+            account2.setCreationDate(account2.getCreationDate().plusDays(1));
+            client1.addAccount(account2);
+            accountRepository.save(account2);
 
-			account2.addTransaction(transaction3);
-			account2.addTransaction(transaction4);
-			transactionRepository.save(transaction3);
-			transactionRepository.save(transaction4);
+            Transaction transaction3 = new Transaction(TransactionType.CREDIT, 34000.0, "Varios", LocalDateTime.now());
 
-			Account account3 = new Account("VIN003", LocalDateTime.now());
-			account3.setBalance(1000000.00);
-			client2.addAccount(account3);
-			accountRepository.save(account3);
+            Transaction transaction4 = new Transaction(TransactionType.DEBIT, (-90000.0), "Aporte de capital", LocalDateTime.now());
 
-			Transaction transaction5 = new Transaction(TransactionType.CREDIT, 10000.0, "Varios", LocalDateTime.now());
+            account2.addTransaction(transaction3);
+            account2.addTransaction(transaction4);
+            transactionRepository.save(transaction3);
+            transactionRepository.save(transaction4);
 
-			Transaction transaction6 = new Transaction(TransactionType.DEBIT, (-30000.0), "Aporte de capital", LocalDateTime.now());
+            Account account3 = new Account("VIN003", LocalDateTime.now());
+            account3.setBalance(1000000.00);
+            client2.addAccount(account3);
+            accountRepository.save(account3);
 
-			account3.addTransaction(transaction5);
-			account3.addTransaction(transaction6);
-			transactionRepository.save(transaction5);
-			transactionRepository.save(transaction6);
+            Transaction transaction5 = new Transaction(TransactionType.CREDIT, 10000.0, "Varios", LocalDateTime.now());
 
-			Account account4 = new Account("VIN004", LocalDateTime.now());
-			account4.setBalance(10500.00);
-			client2.addAccount(account4);
-			accountRepository.save(account4);
+            Transaction transaction6 = new Transaction(TransactionType.DEBIT, (-30000.0), "Aporte de capital", LocalDateTime.now());
 
-			Transaction transaction7 = new Transaction(TransactionType.CREDIT, 70000.0, "Varios", LocalDateTime.now());
+            account3.addTransaction(transaction5);
+            account3.addTransaction(transaction6);
+            transactionRepository.save(transaction5);
+            transactionRepository.save(transaction6);
 
-			Transaction transaction8 = new Transaction(TransactionType.DEBIT, (-80000.0), "Compra Online", LocalDateTime.now());
+            Account account4 = new Account("VIN004", LocalDateTime.now());
+            account4.setBalance(10500.00);
+            client2.addAccount(account4);
+            accountRepository.save(account4);
 
-			account4.addTransaction(transaction7);
-			account4.addTransaction(transaction8);
-			transactionRepository.save(transaction7);
-			transactionRepository.save(transaction8);
+            Transaction transaction7 = new Transaction(TransactionType.CREDIT, 70000.0, "Varios", LocalDateTime.now());
 
-			clientRepository.save(new Client("admin", "admin", "admin@mindhub.com", passwordEncoder.encode("admin")));
+            Transaction transaction8 = new Transaction(TransactionType.DEBIT, (-80000.0), "Compra Online", LocalDateTime.now());
 
-		};
-	}
+            account4.addTransaction(transaction7);
+            account4.addTransaction(transaction8);
+            transactionRepository.save(transaction7);
+            transactionRepository.save(transaction8);
+
+            clientRepository.save(new Client("admin", "admin", "admin@mindhub.com", passwordEncoder.encode("admin")));
+
+        };
+    }
 }
