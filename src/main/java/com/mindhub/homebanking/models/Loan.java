@@ -11,6 +11,8 @@ import java.util.stream.Collectors;
 
 @Entity
 public class Loan {
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "loan")
+    private final Set<ClientLoan> clientLoans = new HashSet<>();
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
@@ -19,9 +21,6 @@ public class Loan {
     private Double maxAmount;
     @ElementCollection
     private List<Integer> payments = new ArrayList<>();
-
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "loan")
-    private final Set<ClientLoan> clientLoans = new HashSet<>();
 
     public Loan() {
 
