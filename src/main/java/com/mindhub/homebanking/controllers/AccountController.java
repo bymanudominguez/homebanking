@@ -59,6 +59,9 @@ public class AccountController {
                 client.addAccount(account);
                 accountRepository.save(account);
             }
+        } else {
+
+            return new ResponseEntity<>("Login to continue", HttpStatus.FORBIDDEN);
         }
 
         return new ResponseEntity<>("Account created successfully", HttpStatus.CREATED);
