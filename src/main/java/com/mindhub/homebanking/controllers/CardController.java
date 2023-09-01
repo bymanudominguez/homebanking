@@ -40,32 +40,33 @@ public class CardController {
     public ResponseEntity<Object> addCard(Authentication authentication, @RequestParam CardType cardType, @RequestParam CardColor cardColor) {
         if (cardType == null) {
 
-            new ResponseEntity<>("You must specify the type of card", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>("You must specify the type of card", HttpStatus.FORBIDDEN);
         }
 
         if (cardColor == null) {
 
-            new ResponseEntity<>("You must specify the color of card", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>("You must specify the color of card", HttpStatus.FORBIDDEN);
         }
 
         Client client = clientRepository.findByEmail(authentication.getName());
+        if (client != null) {
 
-        Set<Card> sameTypeCards = client.getCards().stream().filter(card -> card.getCardType() == cardType).collect(Collectors.toSet());
+            Set<Card> sameTypeCards = client.getCards().stream().filter(card -> card.getCardType() == cardType).collect(Collectors.toSet());
 
-        if (sameTypeCards.toArray().length >= 3) {
+            if (sameTypeCards.toArray().length >= 3) {
 
-            return new ResponseEntity<>("The maximum number for this type of cards was reached", HttpStatus.FORBIDDEN);
-        } else {
-            Card card = new Card(LocalDate.now(), cardType, cardColor);
-            card.setThruDate(card.getFromDate().plusYears(5));
-            card.setCvv(getRandomNumber(100, 999));
-            card.setNumber(getRandomNumber(1000, 9999) + "-" + getRandomNumber(1000, 9999) + "-" + getRandomNumber(1000, 9999) + "-" + getRandomNumber(1000, 9999));
-            card.setCardHolder(client.getFirstName() + " " + client.getLastName());
-            client.addCard(card);
-            cardRepository.save(card);
-
-            return new ResponseEntity<>("The card has been created successfully", HttpStatus.CREATED);
+                return new ResponseEntity<>("The maximum number for this type of cards was reached", HttpStatus.FORBIDDEN);
+            } else {
+                Card card = new Card(LocalDate.now(), cardType, cardColor);
+                card.setThruDate(card.getFromDate().plusYears(5));
+                card.setCvv(getRandomNumber(100, 999));
+                card.setNumber(getRandomNumber(1000, 9999) + "-" + getRandomNumber(1000, 9999) + "-" + getRandomNumber(1000, 9999) + "-" + getRandomNumber(1000, 9999));
+                card.setCardHolder(client.getFirstName() + " " + client.getLastName());
+                client.addCard(card);
+                cardRepository.save(card);
+            }
         }
+        return new ResponseEntity<>("The card has been created successfully", HttpStatus.CREATED);
     }
 
     public int getRandomNumber(int min, int max) {

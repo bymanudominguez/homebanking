@@ -44,54 +44,67 @@ public class TransactionController {
     @Transactional
     @PostMapping("/transactions")
     public ResponseEntity<Object> makeTransaction(Authentication authentication, @RequestParam Double amount, @RequestParam String description, @RequestParam String fromAccountNumber, @RequestParam String toAccountNumber) {
-        if (amount.isNaN() || description.isBlank() || fromAccountNumber.isBlank() || toAccountNumber.isBlank()) {
+        if (amount.isNaN()) {
+            return new ResponseEntity<>("You have to put an amount", HttpStatus.FORBIDDEN);
+        }
 
-            return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
+        if (description.isBlank()) {
+            return new ResponseEntity<>("You have to put a description", HttpStatus.FORBIDDEN);
+        }
+
+        if (fromAccountNumber.isBlank()) {
+            return new ResponseEntity<>("You have to choose a origin account", HttpStatus.FORBIDDEN);
+        }
+
+        if (toAccountNumber.isBlank()) {
+            return new ResponseEntity<>("You have to choose a destination account", HttpStatus.FORBIDDEN);
         }
 
         Client client = clientRepository.findByEmail(authentication.getName());
         Account originAccount = accountRepository.findByNumber(fromAccountNumber);
         Account destinationAccount = accountRepository.findByNumber(toAccountNumber);
 
-        if (originAccount == null) {
+        if (client != null) {
 
-            return new ResponseEntity<>("The account of origin doesn't exist", HttpStatus.FORBIDDEN);
+            if (originAccount == null) {
+                return new ResponseEntity<>("The account of origin doesn't exist", HttpStatus.FORBIDDEN);
+            }
+
+            if (!client.getAccounts().contains(accountRepository.findByNumber(fromAccountNumber))) {
+                return new ResponseEntity<>("This account doesn't belong to you", HttpStatus.FORBIDDEN);
+            }
+
+            if (fromAccountNumber.equals(toAccountNumber)) {
+                return new ResponseEntity<>("The source account is the same as the destination account", HttpStatus.FORBIDDEN);
+            }
+
+            if (destinationAccount == null) {
+                return new ResponseEntity<>("Target account doesn't exist", HttpStatus.FORBIDDEN);
+            }
+
+            if (originAccount.getBalance() < amount) {
+                return new ResponseEntity<>("Not enough funds", HttpStatus.FORBIDDEN);
+            }
+
+
+            Transaction originTransaction = new Transaction(TransactionType.DEBIT, (-amount), description + " to " + destinationAccount.getNumber(), LocalDateTime.now());
+            originAccount.addTransaction(originTransaction);
+            originAccount.setBalance(originAccount.getBalance() - amount);
+
+            Transaction destinationTransaction = new Transaction(TransactionType.CREDIT, amount, description + " from " + originAccount.getNumber(), LocalDateTime.now());
+            destinationAccount.addTransaction(destinationTransaction);
+            destinationAccount.setBalance(destinationAccount.getBalance() + amount);
+
+            transactionRepository.save(originTransaction);
+            transactionRepository.save(destinationTransaction);
+
+            accountRepository.save(originAccount);
+            accountRepository.save(destinationAccount);
+
+            return new ResponseEntity<>("The transaction was successfully completed", HttpStatus.CREATED);
+
+        } else {
+            return new ResponseEntity<>("Login to continue", HttpStatus.FORBIDDEN);
         }
-
-        if (!client.getAccounts().contains(accountRepository.findByNumber(fromAccountNumber))) {
-
-            return new ResponseEntity<>("This account doesn't belong to you", HttpStatus.FORBIDDEN);
-        }
-
-        if (fromAccountNumber.equals(toAccountNumber)) {
-
-            return new ResponseEntity<>("The source account is the same as the destination account", HttpStatus.FORBIDDEN);
-        }
-
-        if (destinationAccount == null) {
-
-            return new ResponseEntity<>("Target account doesn't exist", HttpStatus.FORBIDDEN);
-        }
-
-        if (originAccount.getBalance() < amount) {
-
-            return new ResponseEntity<>("Not enough funds", HttpStatus.FORBIDDEN);
-        }
-
-        Transaction originTransaction = new Transaction(TransactionType.DEBIT, (-amount), description + " to " + destinationAccount.getNumber(), LocalDateTime.now());
-        originAccount.addTransaction(originTransaction);
-        originAccount.setBalance(originAccount.getBalance() - amount);
-
-        Transaction destinationTransaction = new Transaction(TransactionType.CREDIT, amount, description + " from " + originAccount.getNumber(), LocalDateTime.now());
-        destinationAccount.addTransaction(destinationTransaction);
-        destinationAccount.setBalance(destinationAccount.getBalance() + amount);
-
-        transactionRepository.save(originTransaction);
-        transactionRepository.save(destinationTransaction);
-
-        accountRepository.save(originAccount);
-        accountRepository.save(destinationAccount);
-
-        return new ResponseEntity<>("The transaction was successfully completed", HttpStatus.CREATED);
     }
 }
