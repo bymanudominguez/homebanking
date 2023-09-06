@@ -32,42 +32,42 @@ public class HomebankingApplication {
             Client client2 = new Client("Lucia", "Colombo", "lucolombo@gmail.com", passwordEncoder.encode("mad123"));
             clientRepository.save(client2);
 
-            Loan loan1 = new Loan("Hipotecario");
-            loan1.setMaxAmount(500.000);
-            loan1.setPayments(List.of(12, 24, 36, 48, 60));
+            Loan loanMortgage = new Loan("Mortgage");
+            loanMortgage.setMaxAmount(500.000);
+            loanMortgage.setPayments(List.of(12, 24, 36, 48, 60));
 
-            Loan loan2 = new Loan("Personal");
-            loan2.setMaxAmount(100.000);
-            loan2.setPayments(List.of(6, 12, 24));
+            Loan loanPersonal = new Loan("Personal");
+            loanPersonal.setMaxAmount(100.000);
+            loanPersonal.setPayments(List.of(6, 12, 24));
 
-            Loan loan3 = new Loan("Automotriz");
-            loan3.setMaxAmount(300.000);
-            loan3.setPayments(List.of(6, 12, 24, 36));
+            Loan car = new Loan("Car");
+            car.setMaxAmount(300.000);
+            car.setPayments(List.of(6, 12, 24, 36));
 
-            loanRepository.save(loan1);
-            loanRepository.save(loan2);
-            loanRepository.save(loan3);
+            loanRepository.save(loanMortgage);
+            loanRepository.save(loanPersonal);
+            loanRepository.save(car);
 
             ClientLoan clientLoan1 = new ClientLoan();
-            clientLoan1.setLoan(loan1);
+            clientLoan1.setLoan(loanMortgage);
             clientLoan1.setAmount(400000);
             clientLoan1.setPayments(60);
             clientLoan1.setClient(client1);
 
             ClientLoan clientLoan2 = new ClientLoan();
-            clientLoan2.setLoan(loan2);
+            clientLoan2.setLoan(loanPersonal);
             clientLoan2.setAmount(50000);
             clientLoan2.setPayments(12);
             clientLoan2.setClient(client1);
 
             ClientLoan clientLoan3 = new ClientLoan();
-            clientLoan3.setLoan(loan2);
+            clientLoan3.setLoan(loanPersonal);
             clientLoan3.setAmount(100000);
             clientLoan3.setPayments(24);
             clientLoan3.setClient(client2);
 
             ClientLoan clientLoan4 = new ClientLoan();
-            clientLoan4.setLoan(loan3);
+            clientLoan4.setLoan(car);
             clientLoan4.setAmount(200000);
             clientLoan4.setPayments(36);
             clientLoan4.setClient(client2);
