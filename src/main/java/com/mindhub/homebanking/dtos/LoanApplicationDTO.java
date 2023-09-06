@@ -18,7 +18,7 @@ public class LoanApplicationDTO {
         return amount;
     }
 
-    public Long getId() {
+    public Long getLoanId() {
         return loanId;
     }
 

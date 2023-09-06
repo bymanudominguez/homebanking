@@ -45,59 +45,47 @@ public class LoanController {
 
     @Transactional
     @PostMapping("/loans")
-    public ResponseEntity<Object> addLoan(@RequestBody LoanApplicationDTO loan, Authentication authentication) {
-        Client client = clientRepository.findByEmail(authentication.getName());
-        Account account = accountRepository.findByNumber(loan.getNumber());
+    public ResponseEntity<Object> addLoan(@RequestBody LoanApplicationDTO loanApplicationDTO, Authentication authentication) {
+        if (authentication != null) {
+            Client client = clientRepository.findByEmail(authentication.getName());
+            Loan loan = loanRepository.findById(loanApplicationDTO.getLoanId()).orElse(null);
+            Account account = accountRepository.findByNumber(loanApplicationDTO.getNumber());
 
-        if (client != null) {
-           /*
-
-           if (loanRepository.findById(loan.getId()) == null) {
+            if (loan == null) {
 
                 return new ResponseEntity<>("The loan doesn't exist", HttpStatus.FORBIDDEN);
-            }
-
-            if (loan.getAmount() <= 0) {
-
-                return new ResponseEntity<>("The requested amount must be at least $1", HttpStatus.FORBIDDEN);
-            }
-
-            if (loan.getAmount() > loanRepository.findById(loan.getId()).get().getMaxAmount()) {
-
-                return new ResponseEntity<>("The amount exceeds the maximum that can be requested", HttpStatus.FORBIDDEN);
-            }
-
-            if (!loanRepository.findById(loan.getId()).get().getPayments().contains(loan.getPayments())) {
-
-                return new ResponseEntity<>("The amount of payments is not available", HttpStatus.FORBIDDEN);
-            }
-
-            if (accountRepository.findByNumber(loan.getNumber()) == null) {
+            } else if (!client.getAccounts().contains(accountRepository.findByNumber(loanApplicationDTO.getNumber()))) {
 
                 return new ResponseEntity<>("Destination account doesn't exist", HttpStatus.FORBIDDEN);
+            } else if (accountRepository.findByNumber(loanApplicationDTO.getNumber()).getClient() != client) {
+
+                return new ResponseEntity<>("The account doesn't belong to you ", HttpStatus.FORBIDDEN);
+            } else if (loanApplicationDTO.getAmount() <= 0) {
+
+                return new ResponseEntity<>("The requested amount must be at least $1", HttpStatus.FORBIDDEN);
+            } else if (loanApplicationDTO.getAmount() > loan.getMaxAmount()) {
+
+                return new ResponseEntity<>("The amount exceeds the maximum that can be requested", HttpStatus.FORBIDDEN);
+            } else if (!loan.getPayments().contains(loanApplicationDTO.getPayments())) {
+
+                return new ResponseEntity<>("The amount of payments is not available", HttpStatus.FORBIDDEN);
+            } else {
+                Transaction transaction = new Transaction(TransactionType.CREDIT, loanApplicationDTO.getAmount(), loan.getName() + " loan approved", LocalDateTime.now());
+                ClientLoan clientLoan = new ClientLoan(loanApplicationDTO.getAmount() * 0.2, loanApplicationDTO.getPayments());
+                client.addClientLoan(clientLoan);
+                loan.addClientLoan(clientLoan);
+                account.addTransaction(transaction);
+                account.setBalance(account.getBalance() + loanApplicationDTO.getAmount());
+
+                clientLoanRepository.save(clientLoan);
+                transactionRepository.save(transaction);
+                accountRepository.save(account);
+
+                return new ResponseEntity<>("Loan accepted, the money was deposited in your account", HttpStatus.CREATED);
             }
-
-            if (!client.getAccounts().contains(accountRepository.findByNumber(loan.getNumber()))) {
-
-                return new ResponseEntity<>("The account doesn't belong to you", HttpStatus.FORBIDDEN);
-            }
-
-            */
-
-            Transaction transaction = new Transaction(TransactionType.CREDIT, loan.getAmount() * 0.2, loanRepository.findById(loan.getId()).get().getName() + " loan approved", LocalDateTime.now());
-            account.addTransaction(transaction);
-            account.setBalance(account.getBalance() + loan.getAmount());
-
-            ClientLoan clientLoan = new ClientLoan();
-
-            transactionRepository.save(transaction);
-            accountRepository.save(account);
-
-
         } else {
 
             return new ResponseEntity<>("Login to continue", HttpStatus.FORBIDDEN);
         }
-        return new ResponseEntity<>("Loan accepted, the money was deposited in your account", HttpStatus.CREATED);
     }
 }
