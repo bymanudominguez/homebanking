@@ -7,6 +7,7 @@ import com.mindhub.homebanking.models.CardType;
 import com.mindhub.homebanking.models.Client;
 import com.mindhub.homebanking.repositories.CardRepository;
 import com.mindhub.homebanking.repositories.ClientRepository;
+import com.mindhub.homebanking.services.CardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +27,9 @@ import java.util.stream.Collectors;
 public class CardController {
 
     @Autowired
+    private CardService cardService;
+
+    @Autowired
     private CardRepository cardRepository;
 
     @Autowired
@@ -33,7 +37,7 @@ public class CardController {
 
     @RequestMapping("/cards")
     public List<CardDTO> getCards() {
-        return cardRepository.findAll().stream().map(card -> new CardDTO(card)).collect(Collectors.toList());
+        return cardService.getCards();
     }
 
     @PostMapping("/clients/current/cards")
@@ -63,7 +67,7 @@ public class CardController {
                 card.setNumber(getRandomNumber(1000, 9999) + "-" + getRandomNumber(1000, 9999) + "-" + getRandomNumber(1000, 9999) + "-" + getRandomNumber(1000, 9999));
                 card.setCardHolder(client.getFirstName() + " " + client.getLastName());
                 client.addCard(card);
-                cardRepository.save(card);
+                cardService.saveCard(card);
             }
         }
         return new ResponseEntity<>("The card has been created successfully", HttpStatus.CREATED);
