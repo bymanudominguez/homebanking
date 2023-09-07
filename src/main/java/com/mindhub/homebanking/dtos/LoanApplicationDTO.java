@@ -26,7 +26,7 @@ public class LoanApplicationDTO {
         return payments;
     }
 
-    public String getNumber() {
+    public String getToAccountNumber() {
         return toAccountNumber;
     }
 }

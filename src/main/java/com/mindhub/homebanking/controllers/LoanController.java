@@ -49,17 +49,17 @@ public class LoanController {
         if (authentication != null) {
             Client client = clientRepository.findByEmail(authentication.getName());
             Loan loan = loanRepository.findById(loanApplicationDTO.getLoanId()).orElse(null);
-            Account account = accountRepository.findByNumber(loanApplicationDTO.getNumber());
+            Account account = accountRepository.findByNumber(loanApplicationDTO.getToAccountNumber());
 
             if (loan == null) {
 
                 return new ResponseEntity<>("The loan doesn't exist", HttpStatus.FORBIDDEN);
-            } else if (!client.getAccounts().contains(accountRepository.findByNumber(loanApplicationDTO.getNumber()))) {
+            } else if (!client.getAccounts().contains(accountRepository.findByNumber(loanApplicationDTO.getToAccountNumber()))) {
 
                 return new ResponseEntity<>("Destination account doesn't exist", HttpStatus.FORBIDDEN);
-            } else if (accountRepository.findByNumber(loanApplicationDTO.getNumber()).getClient() != client) {
+            } else if (accountRepository.findByNumber(loanApplicationDTO.getToAccountNumber()).getClient() != client) {
 
-                return new ResponseEntity<>("The account doesn't belong to you ", HttpStatus.FORBIDDEN);
+                return new ResponseEntity<>("The account doesn't belong to you", HttpStatus.FORBIDDEN);
             } else if (loanApplicationDTO.getAmount() <= 0) {
 
                 return new ResponseEntity<>("The requested amount must be at least $1", HttpStatus.FORBIDDEN);
