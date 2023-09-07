@@ -54,10 +54,10 @@ public class LoanController {
             if (loan == null) {
 
                 return new ResponseEntity<>("The loan doesn't exist", HttpStatus.FORBIDDEN);
-            } else if (!client.getAccounts().contains(accountRepository.findByNumber(loanApplicationDTO.getToAccountNumber()))) {
+            } else if (!client.getAccounts().contains(account)) {
 
                 return new ResponseEntity<>("Destination account doesn't exist", HttpStatus.FORBIDDEN);
-            } else if (accountRepository.findByNumber(loanApplicationDTO.getToAccountNumber()).getClient() != client) {
+            } else if (account.getClient() != client) {
 
                 return new ResponseEntity<>("The account doesn't belong to you", HttpStatus.FORBIDDEN);
             } else if (loanApplicationDTO.getAmount() <= 0) {
