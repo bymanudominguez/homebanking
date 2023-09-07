@@ -8,6 +8,8 @@ import com.mindhub.homebanking.models.TransactionType;
 import com.mindhub.homebanking.repositories.AccountRepository;
 import com.mindhub.homebanking.repositories.ClientRepository;
 import com.mindhub.homebanking.repositories.TransactionRepository;
+import com.mindhub.homebanking.services.AccountService;
+import com.mindhub.homebanking.services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,11 +22,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
 public class TransactionController {
+
+    @Autowired
+    private AccountService accountService;
+
+    @Autowired
+    private TransactionService transactionService;
 
     @Autowired
     private TransactionRepository transactionRepository;
@@ -38,7 +45,7 @@ public class TransactionController {
     @RequestMapping("/transactions")
     public List<TransactionDTO> getTransaction() {
 
-        return transactionRepository.findAll().stream().map(transaction -> new TransactionDTO(transaction)).collect(Collectors.toList());
+        return transactionService.getTransaction();
     }
 
     @Transactional
@@ -95,11 +102,11 @@ public class TransactionController {
             destinationAccount.addTransaction(destinationTransaction);
             destinationAccount.setBalance(destinationAccount.getBalance() + amount);
 
-            transactionRepository.save(originTransaction);
-            transactionRepository.save(destinationTransaction);
+            transactionService.saveTransaction(originTransaction);
+            transactionService.saveTransaction(destinationTransaction);
 
-            accountRepository.save(originAccount);
-            accountRepository.save(destinationAccount);
+            accountService.saveAccount(originAccount);
+            accountService.saveAccount(destinationAccount);
 
             return new ResponseEntity<>("The transaction was successfully completed", HttpStatus.CREATED);
 

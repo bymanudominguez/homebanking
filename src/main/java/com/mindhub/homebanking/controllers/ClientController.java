@@ -5,6 +5,7 @@ import com.mindhub.homebanking.models.Account;
 import com.mindhub.homebanking.models.Client;
 import com.mindhub.homebanking.repositories.AccountRepository;
 import com.mindhub.homebanking.repositories.ClientRepository;
+import com.mindhub.homebanking.services.AccountService;
 import com.mindhub.homebanking.services.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,11 +17,13 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
 public class ClientController {
+
+    @Autowired
+    private AccountService accountService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -63,7 +66,7 @@ public class ClientController {
             Account account = new Account("VIN-" + getRandomNumber(10000000, 99999999), LocalDateTime.now());
             account.setBalance(0.00);
             client.addAccount(account);
-            accountRepository.save(account);
+            accountService.saveAccount(account);
 
             return new ResponseEntity<>("User successfully created", HttpStatus.CREATED);
         }

@@ -3,7 +3,14 @@ package com.mindhub.homebanking.controllers;
 import com.mindhub.homebanking.dtos.LoanApplicationDTO;
 import com.mindhub.homebanking.dtos.LoanDTO;
 import com.mindhub.homebanking.models.*;
-import com.mindhub.homebanking.repositories.*;
+import com.mindhub.homebanking.repositories.AccountRepository;
+import com.mindhub.homebanking.repositories.ClientRepository;
+import com.mindhub.homebanking.repositories.LoanRepository;
+import com.mindhub.homebanking.repositories.TransactionRepository;
+import com.mindhub.homebanking.services.AccountService;
+import com.mindhub.homebanking.services.ClientLoanService;
+import com.mindhub.homebanking.services.LoanService;
+import com.mindhub.homebanking.services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,31 +23,36 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
 public class LoanController {
 
     @Autowired
-    public LoanRepository loanRepository;
+    private ClientLoanService clientLoanService;
 
     @Autowired
-    public ClientRepository clientRepository;
+    private TransactionService transactionService;
 
     @Autowired
-    public AccountRepository accountRepository;
+    private LoanService loanService;
 
     @Autowired
-    public TransactionRepository transactionRepository;
+    private AccountService accountService;
 
     @Autowired
-    public ClientLoanRepository clientLoanRepository;
+    private LoanRepository loanRepository;
+
+    @Autowired
+    private ClientRepository clientRepository;
+
+    @Autowired
+    private AccountRepository accountRepository;
 
     @RequestMapping("/loans")
     public List<LoanDTO> getLoans() {
 
-        return loanRepository.findAll().stream().map(loan -> new LoanDTO(loan)).collect(Collectors.toList());
+        return loanService.getLoans();
     }
 
     @Transactional
@@ -77,9 +89,9 @@ public class LoanController {
                 account.addTransaction(transaction);
                 account.setBalance(account.getBalance() + loanApplicationDTO.getAmount());
 
-                clientLoanRepository.save(clientLoan);
-                transactionRepository.save(transaction);
-                accountRepository.save(account);
+                clientLoanService.saveClientLoan(clientLoan);
+                transactionService.saveTransaction(transaction);
+                accountService.saveAccount(account);
 
                 return new ResponseEntity<>("Loan accepted, the money was deposited in your account", HttpStatus.CREATED);
             }
