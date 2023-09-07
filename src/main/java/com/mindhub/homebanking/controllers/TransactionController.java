@@ -53,6 +53,8 @@ public class TransactionController {
     public ResponseEntity<Object> makeTransaction(Authentication authentication, @RequestParam Double amount, @RequestParam String description, @RequestParam String fromAccountNumber, @RequestParam String toAccountNumber) {
         if (amount.isNaN()) {
             return new ResponseEntity<>("You have to put an amount", HttpStatus.FORBIDDEN);
+        } else if (amount <= 0) {
+            return new ResponseEntity<>("The amount must be at least $1", HttpStatus.FORBIDDEN);
         }
 
         if (description.isBlank()) {
