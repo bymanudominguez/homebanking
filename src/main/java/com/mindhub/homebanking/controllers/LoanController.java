@@ -71,7 +71,7 @@ public class LoanController {
                 return new ResponseEntity<>("The amount of payments is not available", HttpStatus.FORBIDDEN);
             } else {
                 Transaction transaction = new Transaction(TransactionType.CREDIT, loanApplicationDTO.getAmount(), loan.getName() + " loan approved", LocalDateTime.now());
-                ClientLoan clientLoan = new ClientLoan(loanApplicationDTO.getAmount() * 0.2, loanApplicationDTO.getPayments());
+                ClientLoan clientLoan = new ClientLoan(loanApplicationDTO.getAmount() + loanApplicationDTO.getAmount() * 0.2, loanApplicationDTO.getPayments());
                 client.addClientLoan(clientLoan);
                 loan.addClientLoan(clientLoan);
                 account.addTransaction(transaction);
