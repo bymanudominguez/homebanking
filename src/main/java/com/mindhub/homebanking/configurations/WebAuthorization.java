@@ -19,7 +19,7 @@ public class WebAuthorization {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-        http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/login", "/api/logout", "/api/clients").permitAll().antMatchers("/web/index.html", "/web/js/**", "/web/css/**", "/web/img/**", "/api/clients/online").permitAll().antMatchers(HttpMethod.POST, "/api/clients/current/accounts", "/api/clients/current/cards", "/api/transactions").hasAnyAuthority("ADMIN", "CLIENT").antMatchers("/api/clients/current", "/api/clients/current/accounts", "/api/clients/current/cards", "/web/**").hasAnyAuthority("ADMIN", "CLIENT").antMatchers("/api/clients", "/api/accounts/{id}").hasAuthority("CLIENT").antMatchers("/h2-console/**", "/rest/**", "/api/clients").hasAuthority("ADMIN").anyRequest().denyAll();
+        http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/login", "/api/logout", "/api/clients").permitAll().antMatchers("/web/index.html", "/web/js/**", "/web/css/**", "/web/img/**", "/api/clients/online").permitAll().antMatchers(HttpMethod.POST, "/api/clients/current/accounts", "/api/clients/current/cards", "/api/transactions", "/api/loans").hasAnyAuthority("ADMIN", "CLIENT").antMatchers("/api/clients/current", "/api/clients/current/accounts", "/api/clients/current/cards", "/web/**").hasAnyAuthority("ADMIN", "CLIENT").antMatchers("/api/clients", "/api/accounts/{id}", "/api/loans").hasAuthority("CLIENT").antMatchers("/h2-console/**", "/rest/**", "/api/clients").hasAuthority("ADMIN").anyRequest().denyAll();
 
         http.formLogin().usernameParameter("email").passwordParameter("password").loginPage("/api/login");
 
