@@ -52,22 +52,23 @@ public class AccountController {
 
     @PostMapping("/clients/current/accounts")
     public ResponseEntity<Object> addAccount(Authentication authentication) {
-        Client client = clientRepository.findByEmail(authentication.getName());
-        if (client != null) {
-            if (client.getAccounts().toArray().length >= 3) {
+        if (authentication != null) {
+            Client client = clientRepository.findByEmail(authentication.getName());
+            if (client != null) {
+                if (client.getAccounts().toArray().length >= 3) {
 
-                return new ResponseEntity<>("The maximum number of accounts was reached", HttpStatus.FORBIDDEN);
-            } else {
-                Account account = new Account("VIN-" + getRandomNumber(10000000, 99999999), LocalDateTime.now());
-                account.setBalance(0.00);
-                client.addAccount(account);
-                accountService.saveAccount(account);
+                    return new ResponseEntity<>("The maximum number of accounts was reached", HttpStatus.FORBIDDEN);
+                } else {
+                    Account account = new Account("VIN-" + getRandomNumber(10000000, 99999999), LocalDateTime.now());
+                    account.setBalance(0.00);
+                    client.addAccount(account);
+                    accountService.saveAccount(account);
+                }
             }
         } else {
 
             return new ResponseEntity<>("Login to continue", HttpStatus.FORBIDDEN);
         }
-
         return new ResponseEntity<>("Account created successfully", HttpStatus.CREATED);
     }
 
