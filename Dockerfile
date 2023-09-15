@@ -1,4 +1,4 @@
-FROM gradle:8.2.1-jdk11-correto11
+FROM gradle:8.2.1-jdk11-corretto-11
 
 COPY . .
 
