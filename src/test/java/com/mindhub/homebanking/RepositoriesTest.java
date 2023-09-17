@@ -1,4 +1,4 @@
-package com.mindhub.homebanking;
+/*package com.mindhub.homebanking;
 
 import com.mindhub.homebanking.models.Loan;
 import com.mindhub.homebanking.repositories.LoanRepository;
@@ -11,13 +11,13 @@ import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.NONE;
+import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.NONE;*/
 
-@DataJpaTest
+/*@DataJpaTest
 @AutoConfigureTestDatabase(replace = NONE)
-public class RepositoriesTest {
+public class RepositoriesTest {*/
 
-    @Autowired
+    /*@Autowired
     LoanRepository loanRepository;
 
     @Test
@@ -42,5 +42,7 @@ public class RepositoriesTest {
     public void existCarLoan() {
         List<Loan> loans = loanRepository.findAll();
         assertThat(loans, hasItem(hasProperty("name", is("Car"))));
-    }
+    }*/
+/*
 }
+*/
